@@ -1,6 +1,6 @@
 PREFIX_PKG := django_tutorial_polls
 
-VERSION_BOOTSTRAP := 4.4.1
+VERSION_BOOTSTRAP := 5.1.3
 
 default:
 	grep -E ':\s+#' Makefile
@@ -34,9 +34,11 @@ bootstrap_install:	# Install Bootstrap Library
 	cp -R ../node_modules/bootstrap/dist/* polls/static/bootstrap
 
 bootstrap_download:	# Install Bootstrap from Source
-	mkdir -p install/bootstrap
-	rm -rf polls/static/vendor/bootstrap/bootstrap-$(VERSION_BOOTSTRAP)-dist
-	wget -q https://github.com/twbs/bootstrap/releases/download/v$(VERSION_BOOTSTRAP)/bootstrap-$(VERSION_BOOTSTRAP)-dist.zip -O install/bootstrap/$(VERSION_BOOTSTRAP).zip && \
-	unzip install/bootstrap/$(VERSION_BOOTSTRAP).zip -d polls/static/vendor/bootstrap/
-	mv polls/static/vendor/bootstrap/bootstrap-$(VERSION_BOOTSTRAP)-dist polls/static/vendor/bootstrap/$(VERSION_BOOTSTRAP)
+	Remove-Item	-Force -Recurse		  install	
+	New-Item    -ItemType  directory  install 
+	Remove-Item	-Force -Recurse		  polls\static\vendor\bootstrap\bootstrap-$(VERSION_BOOTSTRAP)-dist
+	Invoke-WebRequest -q https://github.com/twbs/bootstrap/releases/download/v$(VERSION_BOOTSTRAP)/bootstrap-$(VERSION_BOOTSTRAP)-dist.zip -Outfiler install\bootstrap.zip
+	Expand-Archive install\bootstrap.zip -DestinationPath polls\static\vendor\bootstrap
+
+	
 
